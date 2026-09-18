@@ -42,6 +42,11 @@ def save_chunks(chunks: list[dict], path: pathlib.Path = CHUNKS_PATH) -> None:
             f.write(json.dumps(chunk, ensure_ascii=False) + "\n")
 
 
+def load_chunks(path: pathlib.Path = CHUNKS_PATH) -> list[dict]:
+    with open(path, encoding="utf-8") as f:
+        return [json.loads(line) for line in f]
+
+
 if __name__ == "__main__":
     from app.ingest import load_corpus
 
