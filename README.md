@@ -12,7 +12,7 @@ The main finding is that **retrieval recall, not the generator, is the bottlenec
 - The generator refused 22 to 26 of the 40 answerable questions ("Insufficient information."). In hybrid mode, none of the 22 refusals had all the needed evidence retrieved, so the refusals followed what retrieval delivered.
 - Example: a question comparing a Fortune article with a TechCrunch article got 5 chunks that all came from the TechCrunch article, so a comparison was impossible.
 - On the questions that were answered, RAGAS scores were much higher (faithfulness about 0.6 to 0.7, answer relevance about 0.6). The averages over all 40 are low mainly because refusals score 0 on answer relevance.
-- Hybrid retrieved the most evidence and had the best context recall (0.625 vs 0.525 for dense), but with 40 questions per mode, gaps of 0.05 to 0.10 are within noise.
+- Hybrid retrieved the most evidence and had the best context recall (0.625 vs 0.525 for dense). A paired bootstrap over the 40 questions puts the difference at +0.10 with a 95% interval of [0.00, +0.23]: hybrid scored higher on 5 questions, lower on 1 and the same on 34. That is consistent with hybrid helping but not conclusive at this sample size. Against sparse (0.550) the interval is [-0.05, +0.20], so hybrid and sparse cannot be separated.
 
 ### Ideas to improve the experiment
 
