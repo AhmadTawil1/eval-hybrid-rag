@@ -1,0 +1,22 @@
+%%{init: {"theme": "base", "themeVariables": {"fontFamily": "Helvetica, Arial, sans-serif", "fontSize": "16px", "primaryColor": "#ffffff", "primaryTextColor": "#0b0b0b", "primaryBorderColor": "#898781", "lineColor": "#52514e", "tertiaryColor": "#fcfcfb"}}}%%
+flowchart LR
+    A["corpus.json<br/>609 news articles"] --> B["Chunking<br/>512 chars, 64 overlap<br/>17,653 chunks"]
+    B --> C[("Dense index<br/>Qdrant + bge-small-en-v1.5")]
+    B --> D[("BM25 index")]
+    C --> R["Retrieve top-k<br/>mode: dense, sparse or hybrid"]
+    D --> R
+    R --> F["RRF fusion, k=60<br/>(hybrid mode)"]
+    F --> G["Grounded generation<br/>gpt-5-mini, JSON schema<br/>cited answer or<br/>'Insufficient information.'"]
+    G --> API["FastAPI<br/>POST /api/v1/query<br/>GET /api/v1/metrics<br/>GET /healthz"]
+
+    T["50-question golden set<br/>20 direct, 20 multi-hop, 10 trap"] --> BM["Benchmark<br/>x 3 modes"]
+    BM --> J["RAGAS judge<br/>gpt-5.6-terra"]
+    J --> RES[("eval/results.json")]
+    RES --> API
+
+    classDef store fill:#f0efec,stroke:#898781,color:#0b0b0b
+    classDef llm stroke:#0b0b0b,stroke-width:3px
+    classDef edge_ fill:#0b0b0b,stroke:#0b0b0b,color:#ffffff
+    class C,D,RES store
+    class G,J llm
+    class API edge_

@@ -10,7 +10,7 @@ from pydantic import ValidationError
 
 from app import pipeline
 from app.embeddings import get_embedding_model
-from app.generation import GenerationError
+from app.generation import GenerationError, MissingApiKeyError
 from app.retrieval.dense import COLLECTION_NAME, VECTOR_SIZE, get_qdrant_client
 from app.retrieval.sparse import get_bm25
 from app.schemas import QueryRequest, QueryResponse
@@ -41,6 +41,8 @@ def query(request: QueryRequest) -> QueryResponse:
     start = time.perf_counter()
     try:
         result = pipeline.query(request.query, request.mode)
+    except MissingApiKeyError:
+        raise HTTPException(status_code=503, detail="Answer generation is not configured: OPENAI_API_KEY is not set.")
     except (GenerationError, ValidationError):
         logger.exception("generation failed")
         raise HTTPException(status_code=502, detail="The model returned an invalid answer. Please try again.")

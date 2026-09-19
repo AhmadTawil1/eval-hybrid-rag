@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app import main
-from app.generation import GenerationError
+from app.generation import GenerationError, MissingApiKeyError
 
 # No `with` block: the lifespan (model/index loading) is not run, so no Qdrant or model is needed.
 client = TestClient(main.app)
@@ -55,6 +55,16 @@ def test_query_returns_502_when_the_model_output_is_invalid(monkeypatch):
     response = client.post("/api/v1/query", json={"query": "Who?"})
     assert response.status_code == 502
     assert "GroundedAnswer" not in response.text
+
+
+def test_query_returns_503_with_a_clear_message_when_the_key_is_missing(monkeypatch):
+    def no_key(query, mode):
+        raise MissingApiKeyError("OPENAI_API_KEY is not set")
+
+    monkeypatch.setattr(main.pipeline, "query", no_key)
+    response = client.post("/api/v1/query", json={"query": "Who?"})
+    assert response.status_code == 503
+    assert "OPENAI_API_KEY" in response.json()["detail"]
 
 
 def test_metrics_returns_the_results_json():
