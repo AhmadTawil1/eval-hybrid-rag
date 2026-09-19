@@ -75,7 +75,11 @@ def test_every_local_reference_exists_and_paths_are_relative():
 
 def test_page_declares_a_strict_csp_and_has_no_inline_code():
     csp = re.search(r'http-equiv="Content-Security-Policy" content="([^"]+)"', HTML).group(1)
-    assert "script-src 'self'" in csp and "unsafe-inline" not in csp and "unsafe-eval" not in csp
+    assert "unsafe-inline" not in csp and "unsafe-eval" not in csp and "*" not in csp
+    script_src = re.search(r"script-src ([^;]+)", csp).group(1).split()
+    # only the page's own scripts plus Cloudflare's auto-injected analytics beacon (host only: its URL carries a version suffix)
+    assert script_src == ["'self'", "https://static.cloudflareinsights.com"]
+    assert re.search(r"connect-src 'self'(;|$)", csp)
     assert not re.search(r"<script(?![^>]*\bsrc=)[^>]*>", HTML)
     assert " style=" not in HTML and "<style" not in HTML
 

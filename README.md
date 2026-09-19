@@ -5,6 +5,8 @@
 > **Technical report:** [*Is Hybrid Retrieval Worth It? An Evaluation-Driven Comparison of Dense, Sparse and Hybrid RAG on Multi-Hop News Questions*](paper/experiment_report.pdf)
 > Ahmad Tawil, September 2026 · [PDF](paper/experiment_report.pdf) · [LaTeX source](paper/experiment_report.tex)
 >
+> **Explore it live:** [ahmadtawil.dev/eval-hybrid-rag](https://ahmadtawil.dev/eval-hybrid-rag/), a static page where you can compare the real recorded answers of all three search modes on the 50 test questions.
+>
 > **Headline result:** hybrid search found the most of the needed evidence (context recall 0.625 vs 0.525 for dense), but with 40 scored questions the gain is suggestive, not conclusive. The larger finding is that retrieval, not the language model, is the bottleneck: the top 5 results held only 17 to 26% of the evidence a question needs.
 
 [Architecture](#architecture) · [Results](#results) · [Quickstart](#quickstart) · [API examples](#api-examples) · [Design decisions](#design-decisions) · [Limitations](#limitations-and-next-steps)
@@ -193,6 +195,10 @@ Note: run the benchmark as a module (`python -m eval.benchmark`), not as `python
       primaryClass={cs.CL}
 }
 ```
+
+## License
+
+The code is released under the [MIT License](LICENSE). The MultiHop-RAG dataset keeps its own license (ODC-BY, see above), and the news articles it contains belong to their publishers; the site and this repository only show short attributed excerpts for research purposes.
 
 ## Limitations and next steps
 
