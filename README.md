@@ -1,5 +1,14 @@
 # eval-hybrid-rag
 
+**An evaluation-driven comparison of dense, sparse and hybrid retrieval for RAG on multi-hop news questions.**
+
+> **Technical report:** [*Is Hybrid Retrieval Worth It? An Evaluation-Driven Comparison of Dense, Sparse and Hybrid RAG on Multi-Hop News Questions*](paper/experiment_report.pdf)
+> Ahmad Tawil, September 2026 · [PDF](paper/experiment_report.pdf) · [LaTeX source](paper/experiment_report.tex)
+>
+> **Headline result:** hybrid search found the most of the needed evidence (context recall 0.625 vs 0.525 for dense), but with 40 scored questions the gain is suggestive, not conclusive. The larger finding is that retrieval, not the language model, is the bottleneck: the top 5 results held only 17 to 26% of the evidence a question needs.
+
+[Architecture](#architecture) · [Results](#results) · [Quickstart](#quickstart) · [API examples](#api-examples) · [Design decisions](#design-decisions) · [Limitations](#limitations-and-next-steps)
+
 A retrieval-augmented generation (RAG) pipeline over 609 news articles that is judged by measurements, not by how good one answer looks. It compares three retrieval strategies on the same 50-question benchmark: **dense** (embeddings in Qdrant), **sparse** (BM25) and **hybrid** (both, fused with Reciprocal Rank Fusion). Answers are generated from the retrieved text only, with citations, and the model must say "Insufficient information." when the evidence is not there. Quality is scored with RAGAS (faithfulness, answer relevance, context precision, context recall) plus latency and a refusal check on questions that cannot be answered. Everything is served by a FastAPI app you can start with one command.
 
 ## Architecture

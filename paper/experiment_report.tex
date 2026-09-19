@@ -126,7 +126,7 @@ I sampled 50 questions from the 2,556 in MultiHop-RAG with a fixed random seed (
 \item \textbf{10 trap} questions whose answer is \emph{not} in the collection. The only correct reply is ``Insufficient information.''
 \end{itemize}
 
-For every answerable question I located the chunks that contain its evidence facts (exact text match, with a fuzzy-match fallback for 3 facts). All 120 evidence facts were found. Each answerable question needs \textbf{2 to 5 chunks}, usually from different articles.
+For every answerable question I located the chunks that contain its evidence facts (exact text match, with a fuzzy-match fallback for 2 facts). All 120 evidence facts were found. Each answerable question needs \textbf{2 to 5 chunks}, usually from different articles.
 
 I started with 25 questions but increased this to 50 because, with only 20 scored questions, a single question moves an average by 5 points. I did not go to 100 because of budget (about \$9 per full run, from a student budget).
 
@@ -151,7 +151,7 @@ Three more measures need no judge:
 \textbf{Why traps are scored separately.} RAGAS gives a refusal 0 for answer relevance, even when refusing is the correct behaviour. Averaging traps in would punish the system for being honest. So RAGAS averages use only the 40 answerable questions, and traps get their own exact-text check. (I considered telling the judge which questions are traps, but that would leak the answer to the judge.)
 
 \subsection{Models and cost}
-Generator: \code{gpt-5-mini}. Judge: \code{gpt-5.6-terra}, a different and stronger model, so the generator does not grade its own work. Search is fixed at $k=5$. Each mode ran all 50 questions one at a time (150 generations, 0 errors), and the judge produced all 480 scores (40 questions $\times$ 4 metrics $\times$ 3 modes) with none missing. The judge cost about \textbf{\$3.64} and generation about \$0.25.
+Generator: \code{gpt-5-mini}. Judge: \code{gpt-5.6-terra}, a different and stronger model, so the generator does not grade its own work. Search is fixed at $k=5$. Each mode ran all 50 questions one at a time (150 generations, 0 errors), and the judge produced all 480 scores (40 questions $\times$ 4 metrics $\times$ 3 modes) with none missing. The judge cost about \textbf{\$3.64} (measured from token counts) and generation roughly \$0.25 (an estimate).
 
 %=====================================================
 \section{Results}
