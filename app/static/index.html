@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>eval-hybrid-rag</title>
+  <meta name="description" content="Dense, sparse and hybrid retrieval for RAG, compared on multi-hop news questions. Read the results or try it.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="page">
+    <h1>eval-hybrid-rag</h1>
+    <p class="tagline">An evaluation-driven comparison of dense, sparse and hybrid retrieval for RAG on multi-hop news questions.</p>
+    <nav aria-label="Links">
+      <a href="#try">Try it</a>
+      <a href="#results">Results</a>
+      <a href="#how">How it works</a>
+      <a href="/report.pdf">Technical report (PDF)</a>
+      <a href="/docs">API docs</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="try" aria-labelledby="try-h">
+      <h2 id="try-h">Try it</h2>
+      <p class="lead">Ask a question about the 609 news articles (Sept to Dec 2023). The system answers <em>only</em> from the passages it retrieves, cites them, and says "Insufficient information." when the answer is not there.</p>
+
+      <form id="ask-form" novalidate>
+        <label for="question">Your question</label>
+        <textarea id="question" rows="3" maxlength="500" placeholder="Who founded the studio behind the game Cocoon?"></textarea>
+        <div class="row between small muted"><span id="counter">0 / 500</span></div>
+
+        <div class="row wrap">
+          <label for="mode" class="inline">Search mode</label>
+          <select id="mode">
+            <option value="hybrid" selected>hybrid (dense + keyword)</option>
+            <option value="dense">dense (meaning)</option>
+            <option value="sparse">sparse (keywords, BM25)</option>
+          </select>
+        </div>
+
+        <div class="row wrap actions">
+          <button type="submit" id="ask">Ask</button>
+          <button type="button" id="compare" class="secondary">Compare all 3 modes (uses 3 answers)</button>
+          <button type="button" id="search" class="ghost">Search only (free)</button>
+        </div>
+      </form>
+
+      <div class="examples" aria-label="Example questions">
+        <span class="muted small">Examples:</span>
+        <button type="button" class="chip" data-example="0">A question with an answer</button>
+        <button type="button" class="chip" data-example="1">A paraphrased question</button>
+        <button type="button" class="chip" data-example="2">A question with no answer</button>
+      </div>
+
+      <p id="limits" class="notice" role="status">Loading limits...</p>
+      <div id="output" aria-live="polite"></div>
+    </section>
+
+    <section id="results" aria-labelledby="results-h">
+      <h2 id="results-h">Results</h2>
+      <p class="lead" id="results-lead">Loading the benchmark results...</p>
+      <div class="table-wrap"><table id="results-table" aria-label="Benchmark results by search mode"></table></div>
+      <p class="small muted" id="results-note"></p>
+      <div class="figures">
+        <figure>
+          <img src="/charts/02_ragas_metrics.png" alt="Grouped bar chart of the four RAGAS scores for dense, sparse and hybrid search" loading="lazy">
+          <figcaption>RAGAS scores per search mode (40 answerable questions).</figcaption>
+        </figure>
+        <figure>
+          <img src="/charts/06_answerable_outcomes.png" alt="Stacked bars showing, for each mode, how many answerable questions were answered or refused, and how much of the needed evidence search found" loading="lazy">
+          <figcaption>Most refusals happened because search had not found the needed evidence.</figcaption>
+        </figure>
+      </div>
+      <p><strong>Key finding.</strong> Hybrid search found the most evidence, but with 40 scored questions the gain over dense is suggestive, not conclusive. The bigger finding is that <strong>search, not the language model, is the bottleneck</strong>: the top 5 results held only 17 to 26% of the evidence a question needs, so the model correctly refused more than half of the answerable questions. The <a href="/report.pdf">technical report</a> has the details.</p>
+    </section>
+
+    <section id="how" aria-labelledby="how-h">
+      <h2 id="how-h">How it works</h2>
+      <figure>
+        <img src="/assets/architecture.png" alt="Architecture diagram: articles are chunked into a dense Qdrant index and a BM25 index, retrieved and fused with RRF, then answered with citations by gpt-5-mini; a separate evaluation flow writes the results shown above" loading="lazy">
+      </figure>
+      <ul>
+        <li><strong>Dense</strong> search finds passages by meaning, <strong>sparse</strong> by shared keywords (BM25), <strong>hybrid</strong> merges both with Reciprocal Rank Fusion.</li>
+        <li>The top 5 passages go to <code>gpt-5-mini</code>, which must cite them or refuse. The scores above come from a separate, stronger judge model.</li>
+        <li>Answers take about 10 seconds because <code>gpt-5-mini</code> thinks before answering. Search itself takes well under 0.1 s.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="page small muted">
+    Data: <a href="https://github.com/yixuantt/MultiHop-RAG">MultiHop-RAG</a> (Tang and Yang, COLM 2024, ODC-BY). This demo has usage limits to keep its running cost fixed. Retrieval-only search is free.
+  </footer>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

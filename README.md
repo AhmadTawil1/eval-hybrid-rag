@@ -72,7 +72,7 @@ Latency is almost all the LLM call. Measured without the LLM, the whole endpoint
 docker compose up --build
 ```
 
-Then open <http://localhost:8000/docs>.
+Then open <http://localhost:8000> for the results page with a try-it box (or <http://localhost:8000/docs> for the interactive API docs).
 
 - The first start downloads the dataset and builds both indexes, then the API starts. On a fresh machine with an empty Qdrant this took about 20 minutes in total (measured on an 8-core CPU, no GPU needed), most of it embedding the 17,653 chunks; later starts skip that and take under a minute.
 - `/healthz` and `/api/v1/metrics` work immediately. **`/api/v1/query` calls the OpenAI API**, so copy `.env.example` to `.env` and set `OPENAI_API_KEY` first. Each answer costs a fraction of a cent with the default model. The key is read from `.env` at runtime and is never copied into the image.
@@ -102,8 +102,16 @@ curl -X POST localhost:8000/api/v1/query \
   -H "Content-Type: application/json" \
   -d '{"query": "Who founded the studio behind the game Cocoon?", "mode": "hybrid"}'
 
+# Retrieval only: the top passages for a question, no LLM, no OpenAI key needed
+curl -X POST localhost:8000/api/v1/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Who founded the studio behind the game Cocoon?", "mode": "hybrid", "k": 5}'
+
 # The benchmark results (read from eval/results.json, not recomputed)
 curl localhost:8000/api/v1/metrics
+
+# The usage limits and how many answers are left today
+curl localhost:8000/api/v1/limits
 
 # Health: 200 only if Qdrant is reachable AND the embedding model works, otherwise 503
 curl localhost:8000/healthz
@@ -125,7 +133,17 @@ Example `/api/v1/query` response (shape, from a real run in sparse mode):
 }
 ```
 
-Invalid input (an unknown `mode`, an empty `query`) returns 422.
+Invalid input (an unknown `mode`, an empty or over-long `query`) returns 422. Going over the usage limits below returns 429 with a `Retry-After` header.
+
+## Usage limits
+
+Generating an answer calls a paid API, so the service protects the owner's key, which matters if it is ever exposed publicly. All limits are settings (see `.env.example`):
+
+- **Per visitor:** 5 generated answers per hour (`ANSWERS_PER_VISITOR_PER_HOUR`), after which `/api/v1/query` returns 429.
+- **Per day:** 80 generated answers in total (`DAILY_ANSWERS_LIMIT`, roughly a $5 a month ceiling at about $0.002 per answer, an estimate). When it is used up, `/api/v1/query` does not fail: it returns the retrieved passages with `"generation": "paused_daily_limit"` and calls no LLM.
+- **Always available:** `/api/v1/search` returns retrieved passages with no LLM call, so it costs nothing (limited only to 60 requests a minute per visitor to protect the CPU).
+- **Other caps:** questions are limited to 500 characters and the model's output to 4,000 tokens (`MAX_OUTPUT_TOKENS`).
+- The counters live in memory, so a restart resets them; the hard spending limit on the OpenAI key is the backstop. Visitors are told apart by IP address, and `X-Forwarded-For` is trusted only if `TRUST_PROXY_HEADERS=true`.
 
 ## Design decisions
 
@@ -136,6 +154,7 @@ Invalid input (an unknown `mode`, an empty `query`) returns 422.
 - **A separate, stronger judge:** the generator (`gpt-5-mini`) and the RAGAS judge (`gpt-5.6-terra`) are different models, so the generator does not grade its own work.
 - **Trap questions are measured separately:** RAGAS scores a correct refusal as zero, so the 10 unanswerable questions are scored by an exact refusal check instead of being averaged in.
 - **Small runtime image:** Linux uses CPU-only PyTorch and the evaluation tools are kept out of the image (dependency groups in `pyproject.toml`, locked with `uv.lock`). The embedding model is downloaded at build time and the app runs as a non-root user.
+- **Safe to expose:** usage limits plus a free retrieval-only fallback, a strict content-security policy on the page, and everything from the model or the articles is inserted into the page as text, never as HTML.
 - **Startup is gated:** Qdrant must be healthy before ingest runs, and ingest must finish before the API starts.
 
 ## Development

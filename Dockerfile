@@ -30,6 +30,10 @@ COPY --from=builder --chown=appuser:appuser /opt/hf /opt/hf
 COPY app ./app
 COPY scripts ./scripts
 COPY eval/results.json ./eval/results.json
+# files the results page serves: charts, architecture diagram and the technical report
+COPY eval/charts ./eval/charts
+COPY assets/architecture.png ./assets/architecture.png
+COPY paper/experiment_report.pdf ./paper/experiment_report.pdf
 
 # empty mount points owned by appuser, so named volumes mounted here are writable by it
 RUN mkdir -p data/raw data/processed && chown -R appuser:appuser /app/data

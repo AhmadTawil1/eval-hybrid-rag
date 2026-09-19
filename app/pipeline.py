@@ -13,6 +13,24 @@ def get_chunks_by_id() -> dict[str, dict]:
     return {c["chunk_id"]: c for c in load_chunks()}
 
 
+def search(query: str, mode: str, k: int = 5) -> list[dict]:
+    if mode not in SEARCHERS:
+        raise ValueError(f"unknown mode {mode!r}; expected one of {sorted(SEARCHERS)}")
+    chunks_by_id = get_chunks_by_id()
+    return [
+        {
+            "rank": rank,
+            "chunk_id": chunk_id,
+            "source_file": chunks_by_id[chunk_id]["source_file"],
+            "section_header": chunks_by_id[chunk_id]["section_header"],
+            "url": chunks_by_id[chunk_id]["url"],
+            "text": chunks_by_id[chunk_id]["text"],
+            "score": float(score),
+        }
+        for rank, (chunk_id, score) in enumerate(SEARCHERS[mode](query, k), start=1)
+    ]
+
+
 def query(query: str, mode: str, k: int = 5) -> dict:
     if mode not in SEARCHERS:
         raise ValueError(f"unknown mode {mode!r}; expected one of {sorted(SEARCHERS)}")
