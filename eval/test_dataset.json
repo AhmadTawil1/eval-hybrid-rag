@@ -1,0 +1,281 @@
+[
+  {
+    "id": "q01",
+    "query": "After The Independent - Life and Style reported on 2023-10-01 that internet sleep tips and tricks are not guaranteed to work, did FOX News - Health suggest on 2023-12-06 that Time-restricted eating, as a specific approach, could improve the quality of sleep, indicating a potential agreement or disagreement with the effectiveness of internet-advised sleep interventions?",
+    "answer": "Agreement",
+    "question_type": "temporal_query",
+    "set": "direct",
+    "expected_chunk_ids": [
+      "d7dbd6ad8c3c2de2",
+      "9d5c1ac353138f5e"
+    ]
+  },
+  {
+    "id": "q02",
+    "query": "Between the report from The Independent - Life and Style published on October 30, 2023, stating Taylor Swift's commitment to her tour schedule, and the report from The Independent - Life and Style published on December 6, 2023, revealing her openness about her relationship with Travis Kelce, was there a change in the narrative regarding her personal life and professional commitments?",
+    "answer": "Yes",
+    "question_type": "temporal_query",
+    "set": "direct",
+    "expected_chunk_ids": [
+      "66dcf278c4bf3bf6",
+      "5a0282787bc2e021",
+      "66f2285c8b705dae"
+    ]
+  },
+  {
+    "id": "q03",
+    "query": "Has the approach to content moderation by social media companies, as reported by TechCrunch, changed from the time when the Supreme Court was set to hear cases on state laws restricting moderation (published at '2023-10-04T20:07:42+00:00') to the period when Twitter (now called X) under Elon Musk's leadership implemented a crowdsourced moderation system (published at '2023-11-03T17:43:00+00:00')?",
+    "answer": "Yes",
+    "question_type": "temporal_query",
+    "set": "direct",
+    "expected_chunk_ids": [
+      "14e8d5d0f5a26195",
+      "1a1e0f9e930a86ce"
+    ]
+  },
+  {
+    "id": "q04",
+    "query": "Has the portrayal of the 'vampire cause' in Polygon articles changed between the November 9, 2023, article discussing the undermining of vampires' menacing air and the November 15, 2023, article highlighting vampires as a hidden presence in the best versions of stories?",
+    "answer": "no",
+    "question_type": "temporal_query",
+    "set": "direct",
+    "expected_chunk_ids": [
+      "18b6a64af94f1171",
+      "8049f21964878920"
+    ]
+  },
+  {
+    "id": "q05",
+    "query": "Between the TechCrunch report on the situation at OpenAI involving Sam Altman published on November 18, 2023, and the subsequent TechCrunch report on Sam Altman's plans after his departure from OpenAI published on the same day, was there a change in the narrative regarding Sam Altman's professional intentions?",
+    "answer": "No",
+    "question_type": "temporal_query",
+    "set": "direct",
+    "expected_chunk_ids": [
+      "548ec02fe1b1a443",
+      "6002003fe4645711"
+    ]
+  },
+  {
+    "id": "q06",
+    "query": "Does 'The Sydney Morning Herald' suggest that the US economy is at an optimal slowing pace to avoid a recession, in contrast to 'The Age' which implies that a government shutdown could increase the risk of a recession in the US economy?",
+    "answer": "Yes",
+    "question_type": "comparison_query",
+    "set": "direct",
+    "expected_chunk_ids": [
+      "9fa7d4ef7d948155",
+      "490547a8777671a1"
+    ]
+  },
+  {
+    "id": "q07",
+    "query": "Does the article from The Verge suggest that a GameStop gift card is a universally useful gift for gamers regardless of console preference, while the Polygon article recommends specific Nintendo Switch games, indicating a more targeted gift approach for owners of that console?",
+    "answer": "Yes",
+    "question_type": "comparison_query",
+    "set": "direct",
+    "expected_chunk_ids": [
+      "b38f47df5d0b8d8e",
+      "82f03505d13e1447"
+    ]
+  },
+  {
+    "id": "q08",
+    "query": "Does the CBSSports.com article claim that Caesars Sportsbook offers a different new customer bonus bet amount than the Sporting News article claims Caesars Sportsbook is expected to offer to new sign-ups in Vermont?",
+    "answer": "no",
+    "question_type": "comparison_query",
+    "set": "direct",
+    "expected_chunk_ids": [
+      "06581d338071e6fb",
+      "2bca9333a6e10b60"
+    ]
+  },
+  {
+    "id": "q09",
+    "query": "Does the article from The Verge suggest that a GameStop gift card is a universally useless gift for gamers regardless of console preference, while the Polygon article recommends specific Nintendo Switch games, indicating a more targeted gift approach for owners of that console?",
+    "answer": "no",
+    "question_type": "comparison_query",
+    "set": "direct",
+    "expected_chunk_ids": [
+      "b38f47df5d0b8d8e",
+      "82f03505d13e1447"
+    ]
+  },
+  {
+    "id": "q10",
+    "query": "Do 'The Verge' and 'Engadget' articles both suggest that 'Consumers' can find guidance or deals on tech products, while the 'TechCrunch' article proposes a different interest of 'Consumers' in the realm of social networking?",
+    "answer": "Yes",
+    "question_type": "comparison_query",
+    "set": "direct",
+    "expected_chunk_ids": [
+      "b4781afed2ceff81",
+      "b5a7f720fbf7764f",
+      "6c75c53a65c097e7"
+    ]
+  },
+  {
+    "id": "q11",
+    "query": "Who is the individual that presented themselves as a trustworthy figure in the cryptocurrency industry, as reported by The Verge, but is also alleged by the prosecution in a TechCrunch article to have committed fraud, and according to The Verge, informed another trader about permissible withdrawals from an account tied to a now-collapsed company and also admitted to being aware of a financial discrepancy after a judge's intervention?",
+    "answer": "Sam Bankman-Fried",
+    "question_type": "inference_query",
+    "set": "multihop",
+    "expected_chunk_ids": [
+      "7fb9671f0a3debb8",
+      "a7bd61e61a18028b",
+      "25c33a1818186bed",
+      "ddb1cffa2e8c4044"
+    ]
+  },
+  {
+    "id": "q12",
+    "query": "Which person, who has been open about her relationship with Travis Kelce and was spotted at Arrowhead Stadium, has a tour booked for the next year and has stated that paparazzi attention does not affect her, as reported by 'The Independent - Life and Style' and 'The Age'?",
+    "answer": "Taylor Swift",
+    "question_type": "inference_query",
+    "set": "multihop",
+    "expected_chunk_ids": [
+      "5a0282787bc2e021",
+      "152ff7b062bfc708",
+      "66dcf278c4bf3bf6",
+      "66f2285c8b705dae"
+    ]
+  },
+  {
+    "id": "q13",
+    "query": "Which company, featured in multiple TechCrunch articles, has both invested in new hardware developments during an annual event and has been involved in antitrust actions for securing default search engine positions and affecting news publishers' revenues through its practices?",
+    "answer": "Google",
+    "question_type": "inference_query",
+    "set": "multihop",
+    "expected_chunk_ids": [
+      "8ddd97327ba20460",
+      "6277a0bd89301bdb",
+      "25f91f6e38067d2d"
+    ]
+  },
+  {
+    "id": "q14",
+    "query": "What are the entities that not only provide introductory incentives to attract users but also modify their betting options for events and player awards based on news and public sentiment, as reported by the Sporting News?",
+    "answer": "Sportsbooks",
+    "question_type": "inference_query",
+    "set": "multihop",
+    "expected_chunk_ids": [
+      "7dbdeb638a7dd9eb",
+      "76dd50aaddc17206",
+      "bc9c95557e33479f"
+    ]
+  },
+  {
+    "id": "q15",
+    "query": "Which company, according to articles from TechCrunch and The Age, has not only invested billions to remain the default search engine on various devices but is also accused of manipulating search results for ad revenue and harming news publishers' revenues through anticompetitive practices?",
+    "answer": "Google",
+    "question_type": "inference_query",
+    "set": "multihop",
+    "expected_chunk_ids": [
+      "6277a0bd89301bdb",
+      "14e5979f1ca9db71",
+      "25f91f6e38067d2d"
+    ]
+  },
+  {
+    "id": "q16",
+    "query": "Who is the individual under 30, once considered the richest in that age group according to TechCrunch, who is now facing a criminal trial on charges including fraud and conspiracy, and has pleaded not guilty, with allegations of using fraudulent means for gaining wealth, power, and influence?",
+    "answer": "Sam Bankman-Fried",
+    "question_type": "inference_query",
+    "set": "multihop",
+    "expected_chunk_ids": [
+      "ac06c71ecc61a624",
+      "2d0b3d2518648d5f",
+      "dedb168b4f06472c",
+      "ddb1cffa2e8c4044"
+    ]
+  },
+  {
+    "id": "q17",
+    "query": "Which company, known for creating a Prime-themed sale day according to Wired, also offers a two-pack of USB-C-to-USB-C cables for purchase as reported by Polygon, has a dominant position in the e-reader space with its Kindle lineup as mentioned by The Verge, and is considered a life-changing opportunity for sellers by Cnbc | World Business News Leader?",
+    "answer": "Amazon",
+    "question_type": "inference_query",
+    "set": "multihop",
+    "expected_chunk_ids": [
+      "04976e8e1fe3f152",
+      "ed2869b0b883fad9",
+      "62f71731947ad387",
+      "69cbd00bf6211c2b"
+    ]
+  },
+  {
+    "id": "q18",
+    "query": "Which company, known for ranking local search results based on relevance, distance, and prominence, is also involved in legal disputes concerning the distribution of Android apps and the operation of app stores, and is accused of harming news publishers' revenue and content through anticompetitive practices, as reported by The Verge and TechCrunch?",
+    "answer": "Google",
+    "question_type": "inference_query",
+    "set": "multihop",
+    "expected_chunk_ids": [
+      "8ff1dc5e936b29a2",
+      "1b04f3c633b063c4",
+      "8e9cb29abc809d30",
+      "25f91f6e38067d2d"
+    ]
+  },
+  {
+    "id": "q19",
+    "query": "Who is the individual associated with the cryptocurrency industry who, according to articles from The Verge and TechCrunch, presented himself as trustworthy before his company's collapse, admitted to being informed about financial discrepancies after judicial intervention, was alleged to have instructed a colleague to use customer funds to repay debts, and is accused by the prosecution of committing fraud for personal gain?",
+    "answer": "Sam Bankman-Fried",
+    "question_type": "inference_query",
+    "set": "multihop",
+    "expected_chunk_ids": [
+      "a7bd61e61a18028b",
+      "25c33a1818186bed",
+      "b7544256938ac253",
+      "ddb1cffa2e8c4044"
+    ]
+  },
+  {
+    "id": "q20",
+    "query": "Who became a significant figure in generative AI due to ChatGPT, is considered one of the most brilliant and impactful people in the tech industry, and has been accused by sources from both Fortune and TechCrunch of being ousted from a board that he allegedly misled?",
+    "answer": "Sam Altman",
+    "question_type": "inference_query",
+    "set": "multihop",
+    "expected_chunk_ids": [
+      "f3a2fd10e6a120f6",
+      "a6d37bb375eb9c56",
+      "f3ab40b4e46657bc",
+      "548ec02fe1b1a443"
+    ]
+  },
+  {
+    "id": "q21",
+    "query": "Considering the information from a Bloomberg article discussing JPMorgan Chase & Co.'s strategic investments in fintech and a Reuters report on the bank's expansion plans in Asia, what is the first letter of the Asian country where JPMorgan intends to increase its presence and is also the location of a significant fintech company they have invested in?",
+    "answer": "Insufficient information.",
+    "question_type": "null_query",
+    "set": "trap",
+    "expected_chunk_ids": []
+  },
+  {
+    "id": "q22",
+    "query": "Considering the updates to Google Maps as reported by The Verge and the new features introduced as per an article on Engadget, which single letter represents both the beginning of a feature that allows users to explore a city's most popular neighborhoods and the start of the name of the city where Google announced these updates at their annual developer conference?",
+    "answer": "Insufficient information.",
+    "question_type": "null_query",
+    "set": "trap",
+    "expected_chunk_ids": []
+  },
+  {
+    "id": "q23",
+    "query": "Considering the information from an article by The New York Times and another by The Guardian on Surin Kim, which university, known for its significant research contributions and mentioned as Surin Kim's alma mater in The New York Times, also reported a notable increase in international student enrollment in The Guardian's coverage?",
+    "answer": "Insufficient information.",
+    "question_type": "null_query",
+    "set": "trap",
+    "expected_chunk_ids": []
+  },
+  {
+    "id": "q24",
+    "query": "Considering the information from an ESPN article detailing the Chicago Bears' draft picks and a Chicago Tribune report on the team's salary cap situation, which player, represented by the first letter of their last name, was both a recent draft acquisition for the Bears and is expected to have a significant impact on the team's salary cap due to their rookie contract?",
+    "answer": "Insufficient information.",
+    "question_type": "null_query",
+    "set": "trap",
+    "expected_chunk_ids": []
+  },
+  {
+    "id": "q25",
+    "query": "Considering the information from an ESPN article and a BBC Sport report on Dané Van Niekerk, which injury, mentioned in both sources, was a significant factor in her not being able to participate in a major cricket tournament?",
+    "answer": "Insufficient information.",
+    "question_type": "null_query",
+    "set": "trap",
+    "expected_chunk_ids": []
+  }
+]
