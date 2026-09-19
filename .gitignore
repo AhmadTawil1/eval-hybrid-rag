@@ -19,3 +19,5 @@ data/processed/*
 !data/processed/.gitkeep
 
 docs/
+# Cloudflare Wrangler local cache
+.wrangler/
