@@ -1,0 +1,81 @@
+{
+  "dataset": "MultiHop-RAG",
+  "n": 50,
+  "n_answerable": 40,
+  "n_trap": 10,
+  "k": 5,
+  "models": {
+    "generator": "gpt-5-mini",
+    "judge": "gpt-5.6-terra",
+    "judge_embeddings": "text-embedding-3-small",
+    "retrieval_embeddings": "BAAI/bge-small-en-v1.5"
+  },
+  "modes": {
+    "dense": {
+      "ragas": {
+        "faithfulness": 0.4273,
+        "answer_relevancy": 0.2576,
+        "context_precision": 0.6044,
+        "context_recall": 0.525
+      },
+      "latency_ms": {
+        "mean": 10754.4,
+        "p95": 21066.5
+      },
+      "trap_refusal": {
+        "refused": 8,
+        "n": 10,
+        "rate": 0.8
+      },
+      "false_refusal": {
+        "refused": 24,
+        "n": 40,
+        "rate": 0.6
+      }
+    },
+    "sparse": {
+      "ragas": {
+        "faithfulness": 0.4151,
+        "answer_relevancy": 0.2113,
+        "context_precision": 0.5669,
+        "context_recall": 0.55
+      },
+      "latency_ms": {
+        "mean": 9968.3,
+        "p95": 17018.9
+      },
+      "trap_refusal": {
+        "refused": 9,
+        "n": 10,
+        "rate": 0.9
+      },
+      "false_refusal": {
+        "refused": 26,
+        "n": 40,
+        "rate": 0.65
+      }
+    },
+    "hybrid": {
+      "ragas": {
+        "faithfulness": 0.3654,
+        "answer_relevancy": 0.286,
+        "context_precision": 0.6177,
+        "context_recall": 0.625
+      },
+      "latency_ms": {
+        "mean": 12056.3,
+        "p95": 21174.0
+      },
+      "trap_refusal": {
+        "refused": 9,
+        "n": 10,
+        "rate": 0.9
+      },
+      "false_refusal": {
+        "refused": 22,
+        "n": 40,
+        "rate": 0.55
+      }
+    }
+  }
+}

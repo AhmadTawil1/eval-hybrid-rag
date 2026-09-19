@@ -34,9 +34,12 @@ def get_openai_client() -> OpenAI:
 
 def generate(query: str, chunks: list[dict], client: OpenAI | None = None) -> GroundedAnswer:
     client = client or get_openai_client()
+    model = get_settings().llm_model
+    # gpt-5 models only accept the default temperature
+    temperature = {} if model.startswith("gpt-5") else {"temperature": 0}
     completion = client.chat.completions.parse(
-        model=get_settings().llm_model,
-        temperature=0,
+        model=model,
+        **temperature,
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": f"Context:\n{format_context(chunks)}\n\nQuestion: {query}"},

@@ -25,10 +25,10 @@ def group_by_type(queries: list[dict]) -> dict[str, list[dict]]:
 
 
 SAMPLE_PLAN = [
-    ("direct", "temporal_query", 5),
-    ("direct", "comparison_query", 5),
-    ("multihop", "inference_query", 10),
-    ("trap", "null_query", 5),
+    ("direct", "temporal_query", 10),
+    ("direct", "comparison_query", 10),
+    ("multihop", "inference_query", 20),
+    ("trap", "null_query", 10),
 ]
 
 
