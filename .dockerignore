@@ -1,0 +1,19 @@
+.git
+.gitignore
+.venv
+__pycache__/
+*.py[oc]
+.pytest_cache
+.ruff_cache
+
+# secrets never go into an image
+.env
+.env.*
+!.env.example
+
+# data is built by the ingest service into volumes, not baked in
+data/raw
+data/processed
+
+docs
+tests

@@ -1,0 +1,9 @@
+# Use together with the base file:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+services:
+  qdrant:
+    restart: unless-stopped
+    ports: !reset [] # not published to the host; only the api container can reach it
+
+  api:
+    restart: unless-stopped

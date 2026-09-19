@@ -4,6 +4,7 @@ from functools import lru_cache
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
 
+from app.config import get_settings
 from app.embeddings import get_embedding_model
 
 COLLECTION_NAME = "mhrag_chunks"
@@ -14,7 +15,8 @@ NAMESPACE = uuid.NAMESPACE_URL
 
 @lru_cache(maxsize=1)
 def get_qdrant_client() -> QdrantClient:
-    return QdrantClient(url="http://localhost:6333")
+    settings = get_settings()
+    return QdrantClient(url=settings.qdrant_url, api_key=settings.qdrant_api_key)
 
 
 def create_collection() -> None:
@@ -24,6 +26,13 @@ def create_collection() -> None:
             collection_name=COLLECTION_NAME,
             vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
         )
+
+
+def index_is_current(expected_points: int) -> bool:
+    client = get_qdrant_client()
+    if not client.collection_exists(COLLECTION_NAME):
+        return False
+    return client.count(COLLECTION_NAME, exact=True).count == expected_points
 
 
 def chunk_id_to_point_id(chunk_id: str) -> str:

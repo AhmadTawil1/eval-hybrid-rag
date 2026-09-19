@@ -30,7 +30,7 @@ def verify_indexes(bm25_ids: list[str]) -> None:
         )
 
 
-def main() -> None:
+def main(force: bool = False) -> None:
     from app.chunking import chunk_articles, save_chunks
     from app.retrieval import dense, sparse
 
@@ -42,8 +42,11 @@ def main() -> None:
     print(f"saved {len(chunks)} chunks")
 
     dense.create_collection()
-    dense.embed_and_upsert(chunks)
-    print(f"dense: upserted {len(chunks)} chunks into '{dense.COLLECTION_NAME}'")
+    if force or not dense.index_is_current(len(chunks)):
+        dense.embed_and_upsert(chunks)
+        print(f"dense: upserted {len(chunks)} chunks into '{dense.COLLECTION_NAME}'")
+    else:
+        print(f"dense: '{dense.COLLECTION_NAME}' already holds {len(chunks)} points, skipping embedding (--force to redo)")
 
     bm25, chunk_ids = sparse.build_bm25(chunks)
     sparse.save_bm25(bm25, chunk_ids)
@@ -54,4 +57,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+
+    main(force="--force" in sys.argv[1:])

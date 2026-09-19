@@ -29,7 +29,10 @@ class GenerationError(Exception):
 
 @lru_cache(maxsize=1)
 def get_openai_client() -> OpenAI:
-    return OpenAI(api_key=get_settings().openai_api_key)
+    api_key = get_settings().openai_api_key
+    if not api_key:
+        raise RuntimeError("OPENAI_API_KEY is not set")
+    return OpenAI(api_key=api_key)
 
 
 def generate(query: str, chunks: list[dict], client: OpenAI | None = None) -> GroundedAnswer:
