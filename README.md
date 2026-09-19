@@ -145,6 +145,17 @@ Generating an answer calls a paid API, so the service protects the owner's key, 
 - **Other caps:** questions are limited to 500 characters and the model's output to 4,000 tokens (`MAX_OUTPUT_TOKENS`).
 - The counters live in memory, so a restart resets them; the hard spending limit on the OpenAI key is the backstop. Visitors are told apart by IP address, and `X-Forwarded-For` is trusted only if `TRUST_PROXY_HEADERS=true`.
 
+## Portfolio site (static)
+
+`site/` is a self-contained static version for a portfolio: it needs no server, so it costs nothing to host and cannot expose an API key. It has the **benchmark explorer** (all 50 test questions, each shown in all three search modes with the real recorded answers, cited sources, how much of the needed evidence search found, and the exact passages the model saw), the results table and charts, the architecture diagram, and the technical report. It cannot answer new questions; for that, run the app locally (Quickstart above).
+
+```bash
+python -m http.server --directory site 8080   # preview at http://localhost:8080
+uv run python -m scripts.build_site           # rebuild site/ from the saved benchmark outputs
+```
+
+Every path in the site is relative, so the folder can be uploaded as its own project (for example to Cloudflare Pages: `npx wrangler pages deploy site`, or drag the `site/` folder into the dashboard) or copied into a subfolder of an existing site. Set `SITE_REPO_URL` when rebuilding to show a link to the source code on the page.
+
 ## Design decisions
 
 - **Chunking:** 512 characters with 64 overlap, so a fact split across a boundary still appears whole in one chunk. Chunk ids are a hash of URL, position and text, so they are stable across re-ingestion.

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>eval-hybrid-rag</title>
+  <meta name="description" content="Dense, sparse and hybrid retrieval for RAG, compared on multi-hop news questions. Browse the real recorded answers, the results and the technical report.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <header class="page">
+    <h1>eval-hybrid-rag</h1>
+    <p class="tagline">An evaluation-driven comparison of dense, sparse and hybrid retrieval for RAG on multi-hop news questions.</p>
+    <nav aria-label="Sections">
+      <a href="#explore">Explore the benchmark</a>
+      <a href="#results">Results</a>
+      <a href="#how">How it works</a>
+      <a href="#run">Run it yourself</a>
+      <a href="report.pdf">Technical report (PDF)</a>
+    </nav>
+    <p class="notice">This is a static page: there is no server behind it, so you cannot type a new question here. What you can browse are the <strong>real answers recorded during the benchmark</strong>, for all 50 test questions in all three search modes.</p>
+  </header>
+
+  <main>
+    <section id="explore" aria-labelledby="explore-h">
+      <h2 id="explore-h">Explore the benchmark</h2>
+      <p class="lead">Pick a question to see how dense, sparse and hybrid search did on it: what the model answered, which sources it cited, how much of the <em>needed evidence</em> search found, and the exact passages the model saw. Answers were written by <code id="generator">gpt-5-mini</code> from the top 5 passages.</p>
+
+      <div class="examples" aria-label="Featured questions">
+        <span class="muted small">Start with:</span>
+        <button type="button" class="chip" data-featured="q11">The report's example: one needed article is missing</button>
+        <button type="button" class="chip" data-featured="q01">Answered with all the evidence</button>
+        <button type="button" class="chip" data-featured="q36">Hybrid answers, the others refuse</button>
+        <button type="button" class="chip" data-featured="q47">A trap the model fell for</button>
+      </div>
+
+      <div class="controls">
+        <div>
+          <label for="set-filter">Question set</label>
+          <select id="set-filter">
+            <option value="all">All 50 questions</option>
+            <option value="direct">Direct (20)</option>
+            <option value="multihop">Multi-hop (20)</option>
+            <option value="trap">Trap: no answer exists (10)</option>
+          </select>
+        </div>
+        <div class="grow">
+          <label for="question-select">Question</label>
+          <select id="question-select"></select>
+        </div>
+        <div class="stepper">
+          <button type="button" id="prev" class="ghost" aria-label="Previous question">Previous</button>
+          <span id="position" class="muted small" aria-live="polite"></span>
+          <button type="button" id="next" class="ghost" aria-label="Next question">Next</button>
+        </div>
+      </div>
+
+      <div id="detail" aria-live="polite"><p class="muted">Loading the recorded answers...</p></div>
+      <p class="small muted">How to read the numbers: "needed passages" is a strict check against the exact evidence chunks the dataset lists, so it is a lower bound. RAGAS context recall is judged by a language model against the short reference answer, so the two can disagree: a short answer such as a company name can appear in a passage that is not one of the needed ones.</p>
+    </section>
+
+    <section id="results" aria-labelledby="results-h">
+      <h2 id="results-h">Results</h2>
+      <p class="lead" id="results-lead">Loading the benchmark results...</p>
+      <div class="table-wrap"><table id="results-table" aria-label="Benchmark results by search mode"></table></div>
+      <p class="small muted" id="results-note"></p>
+      <div class="figures">
+        <figure>
+          <img src="img/02_ragas_metrics.png" alt="Grouped bar chart of the four RAGAS scores for dense, sparse and hybrid search" loading="lazy">
+          <figcaption>RAGAS scores per search mode (40 answerable questions).</figcaption>
+        </figure>
+        <figure>
+          <img src="img/06_answerable_outcomes.png" alt="Stacked bars showing, for each mode, how many answerable questions were answered or refused, and how much of the needed evidence search found" loading="lazy">
+          <figcaption>Most refusals happened because search had not found the needed evidence.</figcaption>
+        </figure>
+        <figure>
+          <img src="img/05_evidence_retrieved.png" alt="Bar chart of the share of needed evidence found in the top 5 results for each mode" loading="lazy">
+          <figcaption>How much of the needed evidence the top 5 results contained.</figcaption>
+        </figure>
+        <figure>
+          <img src="img/04_latency.png" alt="Bar chart of mean and 95th percentile latency for each mode" loading="lazy">
+          <figcaption>Latency is almost all the language model call.</figcaption>
+        </figure>
+      </div>
+      <p><strong>Key finding.</strong> Hybrid search found the most evidence, but with 40 scored questions the gain over dense is suggestive, not conclusive. The bigger finding is that <strong>search, not the language model, is the bottleneck</strong>: the top 5 results held only 17 to 26% of the evidence a question needs, so the model correctly refused more than half of the answerable questions. The <a href="report.pdf">technical report</a> has the details and the limitations.</p>
+    </section>
+
+    <section id="how" aria-labelledby="how-h">
+      <h2 id="how-h">How it works</h2>
+      <figure>
+        <img src="img/architecture.png" alt="Architecture diagram: articles are chunked into a dense Qdrant index and a BM25 index, retrieved and fused with RRF, then answered with citations by gpt-5-mini; a separate evaluation flow scores the results" loading="lazy">
+      </figure>
+      <ul>
+        <li><strong>Dense</strong> search finds passages by meaning, <strong>sparse</strong> by shared keywords (BM25), <strong>hybrid</strong> merges both with Reciprocal Rank Fusion.</li>
+        <li>The top 5 passages go to <code>gpt-5-mini</code>, which must cite them or answer "Insufficient information.". The scores come from a separate, stronger judge model (RAGAS).</li>
+        <li>10 of the 50 questions are traps whose answer is not in the collection, to check that the system refuses instead of making something up.</li>
+      </ul>
+    </section>
+
+    <section id="run" aria-labelledby="run-h">
+      <h2 id="run-h">Run it yourself</h2>
+      <p class="lead">The live system (FastAPI, Qdrant, the same three search modes and a try-it box) starts with one command. It needs Docker; the first start takes about 20 minutes because it builds the search indexes. Asking new questions needs an OpenAI key in a <code>.env</code> file; browsing retrieved passages does not.</p>
+      <pre><code>docker compose up --build
+# then open http://localhost:8000</code></pre>
+      <p id="repo-link" class="small"></p>
+    </section>
+  </main>
+
+  <footer class="page small muted">
+    Data: <a href="https://github.com/yixuantt/MultiHop-RAG">MultiHop-RAG</a> (Tang and Yang, COLM 2024, ODC-BY). The answers on this page were recorded once, in a single benchmark run, and are shown as they were produced.
+  </footer>
+
+  <script src="site.js" defer></script>
+</body>
+</html>
